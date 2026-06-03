@@ -9,7 +9,6 @@ struct Nava{
     string taraOrigine;
     string taraDestinatie;
     string tipContainer;
-    int numarContainer;
     int prioritate;
     int ordineSosire;
 };

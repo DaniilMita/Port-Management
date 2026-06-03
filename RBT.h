@@ -3,7 +3,8 @@
 
 #include "Nava.h"
 #include <iostream>
-#include <string>
+
+using namespace std;
 
 typedef enum { RED, BLACK } Color;
 
@@ -19,7 +20,29 @@ typedef struct RBT {
     Nod* root;
 } RBT;
 
-Nod* NIL;
+inline Nod* NIL = nullptr;
+
+void initNil(){
+    if (NIL==nullptr){
+    NIL = new Nod();
+    NIL->color = BLACK;
+        NIL->left = NIL;
+        NIL->right = NIL;
+        NIL->parent = NIL;
+    }
+}
+
+/*
+ * Functie: creareNod
+ * ------------------
+ * Creeaza si initializeaza un nod nou pentru arborele Red-Black.
+ *
+ * Parametri:
+ * v - valoarea intreaga care va fi stocata in nod
+ *
+ * Returneaza:
+ * pointer catre nodul nou creat
+ */
 
  Nod* creareNod(Nava v)
 {
@@ -31,6 +54,18 @@ Nod* NIL;
     n->parent = NIL;
     return n;
 }
+
+/*
+ * Functie: creareArbore
+ * ---------------------
+ * Creeaza si initializeaza un arbore Red-Black gol.
+ *
+ * Parametri:
+ * nu are
+ *
+ * Returneaza:
+ * pointer catre structura arborelui Red-Black
+ */
 
  RBT* creareArbore()
 {
@@ -300,7 +335,7 @@ Nod* succesor(Nod* x)
 
     if (z == NIL)
     {
-        printf("Valoarea nu exista in arbore\n");
+        printf("Nava solicitata nu exista in registrul istoric.\n");
         return;
     }
 
@@ -354,41 +389,26 @@ Nod* succesor(Nod* x)
     delete z;
 }
 
- void printLevelOrder(RBT* t)
-{
+void parcurgereInOrder(Nod* nod){
+     if (nod==NIL) return;
+     parcurgereInOrder(nod->left);
 
-    if (t->root == NIL) {
-        printf("Arborele este gol.\n");
-        return;
-    }
+     printf("Nume: %s || Origine: %s pleaca %s  || Prioritate %d || Sosire %d || %s\n",
+     nod->data.nume.c_str(),
+     nod->data.taraOrigine.c_str(),
+     nod->data.taraDestinatie.c_str(),
+     nod->data.prioritate,
+     nod->data.ordineSosire,
+     nod->color==RED?"R":"B");
 
-    Nod** coada = new Nod*[1000];
-    int head = 0, tail = 0;
-
-    coada[tail++] = t->root;
-
-    while (head < tail)
-    {
-        Nod* curent = coada[head++];
-
-        printf("Nume: %s || Tara: %s pleaca %s  || Prioritate %d || Sosire %d || %s\n",
-            curent->data.nume.c_str(),
-            curent->data.taraOrigine.c_str(),
-            curent->data.taraDestinatie.c_str(),
-            curent->data.prioritate,
-            curent->data.ordineSosire,
-            curent->color==RED?"R":"B");
-
-        if (curent->left != NIL)
-            coada[tail++] = curent->left;
-        if (curent->right != NIL)
-            coada[tail++] = curent->right;
-    }
-    delete[] coada;
+     parcurgereInOrder(nod->right);
 }
 
-
-
-
-
-#endif //PORTMANAGEMENT_RBT_H
+void afisareCronologie(RBT* t){
+    if (t->root == NIL){
+        cout << "Registrul cronologic este gol\n";
+        return;
+    }
+    parcurgereInOrder(t->root);
+}
+ #endif //PORTMANAGEMENT_RBT_H
