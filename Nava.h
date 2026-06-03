@@ -11,6 +11,15 @@ struct Nava{
     string tipContainer;
     int prioritate;
     int ordineSosire;
+
+    Nava(string n="", string t="", string trO="", string dest="",int ord=0, int pr=-1,) {
+        nume = n;
+        tipContainer = t;
+        taraOrigine = trO;
+        taraDestinatie = dest;
+        ordineSosire = ord;
+        prioritate = pr;
+    }
 };
 
 

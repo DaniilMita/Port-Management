@@ -17,6 +17,22 @@ typedef struct HashTable{
     int size;
 } HashTable;
 
+/*
+ * Functie: hashFunction
+ * ------------------
+ * Calculeaza un index numeric pe baza unui string folosind algoritmul DJB2.
+ * Converteste numele navei intr-o valoare numerica si aplica operatia modulo
+ * (compresie)
+ * pentru a incadra rezultatul in limitele tabelei.
+ *
+ * Parametri:
+ * key - string-ul (numele navei) care va fi transformat in hash
+ * size - dimensiunea maxima a tabelei Hash
+ *
+ * Returneaza:
+ * un numar intreg reprezentand indexul unde va fi stocata nava
+ */
+
 int hashFunction(string key,int size){
     unsigned long hash=5381;
     for (char c : key){
@@ -24,6 +40,20 @@ int hashFunction(string key,int size){
     }
     return hash % size;
 }
+
+/*
+ * Functie: creareTabel
+ * ------------------
+ * Creeaza si initializeaza o tabela Hash noua in memorie.
+ * Aloca spatiu pentru structura principala, seteaza capacitatea
+ * si initializeaza toate sloturile din vector cu nullptr.
+ *
+ * Parametri:
+ * size - dimensiunea pe care o va avea tabela
+ *
+ * Returneaza:
+ * pointer catre tabela Hash nou creata si initializata
+ */
 
 HashTable* creareTabel(int size)
 {
@@ -34,6 +64,22 @@ HashTable* creareTabel(int size)
         table->table[i] = nullptr;
     return table;
 }
+
+/*
+ * Functie: inserareHash
+ * ------------------
+ * Insereaza o nava noua in tabela Hash pe baza numelui sau.
+ * Calculeaza indexul prin functia de dispersie si adauga nodul in tabel;
+ * in caz de coliziune, noul nod este inserat la inceputul listei .
+ *
+ * Parametri:
+ * table - pointer catre tabela Hash in care se face inserarea
+ * key - string-ul ce reprezinta cheia de identificare a nodului
+ * nava - structura cu datele complete ale navei care trebuie salvata
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
 void inserareHash(HashTable* table,string key,Nava nava){
     int index = hashFunction(nava.nume,table->size);
@@ -51,6 +97,21 @@ void inserareHash(HashTable* table,string key,Nava nava){
     }
 }
 
+/*
+ * Functie: cautareHash
+ * ------------------
+ * Cauta o nava in tabela Hash pe baza numelui primit ca cheie.
+ * Calculeaza indexul unic prin functia de dispersie si parcurge
+ * liniar lista inlantuita din acel slot pana gaseste potrivirea.
+ *
+ * Parametri:
+ * table - pointer catre tabela Hash in care se efectueaza cautarea
+ * key - string-ul ce reprezinta numele navei cautate
+ *
+ * Returneaza:
+ * pointer catre nodul HashNode gasit, sau nullptr daca nava nu exista
+ */
+
 HashNode* cautareHash(HashTable* table,string key){
     int index = hashFunction(key,table->size);
     HashNode* temp = table->table[index];
@@ -61,6 +122,21 @@ HashNode* cautareHash(HashTable* table,string key){
     }
     return nullptr;
 }
+
+/*
+ * Functie: stergereHash
+ * ------------------
+ * Elimina o nava din tabela Hash pe baza numelui primit ca cheie.
+ * Identifica slotul prin functia de dispersie, parcurge lista inlantuita
+ * mentinand un pointer catre nodul precedent si elibereaza memoria nodului sters.
+ *
+ * Parametri:
+ * table - pointer catre tabela Hash din care se va sterge nava
+ * key - string-ul ce reprezinta numele navei care trebuie eliminate
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
 void stergereHash(HashTable* table,string key)
 {
@@ -79,6 +155,29 @@ void stergereHash(HashTable* table,string key)
         prev = temp;
         temp = temp->next;
     }
+}
+
+/*
+ * Functie: distrugeTabel
+ * ------------------
+ * Elibereaza toata memoria alocata dinamic pentru tabela Hash.
+ * Parcurge fiecare slot, sterge nodurile din listele inlantuite (Chaining)
+ * si la final sterge vectorul principal de pointeri si structura tabelei.
+ */
+void distrugeTabel(HashTable* table) {
+    if (table == nullptr) return;
+
+    for (int i = 0; i < table->size; i++) {
+        HashNode* current = table->table[i];
+        while (current != nullptr) {
+            HashNode* deSters = current;
+            current = current->next;
+            delete deSters;
+        }
+    }
+
+    delete[] table->table;
+    delete table;
 }
 
 #endif //PORTMANAGEMENT_HASHTABLE_H

@@ -74,6 +74,20 @@ void initNil(){
     return t;
 }
 
+/*
+ * Functie: rotatieStanga
+ * ----------------------
+ * Executa o rotatie la stanga in jurul nodului x.
+ * Rotatia este folosita pentru mentinerea proprietatilor arborelui Red-Black.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * x - nodul in jurul caruia se face rotatia
+ *
+ * Returneaza:
+ * nimic (void)
+ */
+
 void rotatieStanga(RBT* t, Nod* x)
 {
     Nod* y = x->right;
@@ -95,6 +109,20 @@ void rotatieStanga(RBT* t, Nod* x)
     y->left = x;
     x->parent = y;
 }
+
+/*
+ * Functie: rotatieDreapta
+ * -----------------------
+ * Executa o rotatie la dreapta in jurul nodului y.
+ * Rotatia este folosita pentru mentinerea proprietatilor arborelui Red-Black.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * y - nodul in jurul caruia se face rotatia
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
 void rotatieDreapta(RBT* t, Nod* y)
  {
@@ -118,12 +146,39 @@ void rotatieDreapta(RBT* t, Nod* y)
      y->parent = x;
  }
 
+/*
+ * Functie: minim
+ * --------------
+ * Determina nodul cu valoarea minima din subarborele
+ * care are radacina in nodul x.
+ *
+ * Parametri:
+ * x - radacina subarborelui analizat
+ *
+ * Returneaza:
+ * pointer catre nodul cu valoarea minima
+ */
+
  Nod* minim(Nod* x)
 {
     while (x->left != NIL)
         x = x->left;
     return x;
 }
+
+/*
+ * Functie: succesor
+ * -----------------
+ * Determina succesorul unui nod in arborele Red-Black.
+ * Succesorul este nodul cu cea mai mica valoare mai mare
+ * decat valoarea nodului curent.
+ *
+ * Parametri:
+ * x - nodul pentru care se cauta succesorul
+ *
+ * Returneaza:
+ * pointer catre nodul succesor
+ */
 
 Nod* succesor(Nod* x)
 {
@@ -141,6 +196,20 @@ Nod* succesor(Nod* x)
     return y;
 }
 
+/*
+ * Functie: insertFixup
+ * --------------------
+ * Repara proprietatile arborelui Red-Black dupa inserarea
+ * unui nod nou.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * z - nodul nou inserat care poate incalca proprietatile arborelui
+ *
+ * Returneaza:
+ * nimic (void)
+ */
+
  void insertFixup(RBT* t, Nod* z)
 {
     while (z->parent->color == RED)
@@ -151,7 +220,7 @@ Nod* succesor(Nod* x)
 
             if (y->color == RED)
             {
-
+                // COMPLETAT: Cazul 1 (Unchiul y este Rosu)
                 z->parent->color = BLACK;
                 y->color = BLACK;
                 z->parent->parent->color = RED;
@@ -165,7 +234,7 @@ Nod* succesor(Nod* x)
                     rotatieStanga(t, z);
                 }
 
-
+                // COMPLETAT: Cazul 3 (Unchiul y este Negru, z e fiu stang)
                 z->parent->color = BLACK;
                 z->parent->parent->color = RED;
                 rotatieDreapta(t, z->parent->parent);
@@ -184,7 +253,7 @@ Nod* succesor(Nod* x)
             }
             else
             {
-
+                // COMPLETAT: Cazul 2 si 3 simetrice
                 if (z == z->parent->left)
                 {
                     z = z->parent;
@@ -198,8 +267,22 @@ Nod* succesor(Nod* x)
         }
     }
 
-    t->root->color = BLACK;
+    t->root->color = BLACK; // COMPLETAT: Radacina trebuie sa ramana neagra
 }
+
+/*
+ * Functie: inserare
+ * -----------------
+ * Insereaza o valoare noua in arborele Red-Black si
+ * apeleaza procedura de reechilibrare.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * val - valoarea care va fi inserata in arbore
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
  void inserare(RBT* t, Nava val)
 {
@@ -232,6 +315,21 @@ Nod* succesor(Nod* x)
     insertFixup(t, z);
 }
 
+/*
+ * Functie: transplant
+ * -------------------
+ * Inlocuieste subarborele cu radacina u cu subarborele v.
+ * Este utilizata in algoritmul de stergere.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * u - nodul care va fi inlocuit
+ * v - nodul care il va inlocui pe u
+ *
+ * Returneaza:
+ * nimic (void)
+ */
+
  void transplant(RBT* t, Nod* u, Nod* v)
 {
     if (u->parent == NIL)
@@ -244,6 +342,20 @@ Nod* succesor(Nod* x)
     v->parent = u->parent;
 }
 
+/*
+ * Functie: deleteFixup
+ * --------------------
+ * Repara proprietatile arborelui Red-Black dupa
+ * stergerea unui nod.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * x - nodul de la care incepe procesul de reechilibrare
+ *
+ * Returneaza:
+ * nimic (void)
+ */
+
  void deleteFixup(RBT* t, Nod* x)
 {
     while (x != t->root && x->color == BLACK)
@@ -254,6 +366,7 @@ Nod* succesor(Nod* x)
 
             if (w->color == RED)
             {
+                // COMPLETAT: Cazul 1
                 w->color = BLACK;
                 x->parent->color = RED;
                 rotatieStanga(t, x->parent);
@@ -275,6 +388,7 @@ Nod* succesor(Nod* x)
                     w = x->parent->right;
                 }
 
+                // COMPLETAT: Cazul 4
                 w->color = x->parent->color;
                 x->parent->color = BLACK;
                 w->right->color = BLACK;
@@ -284,6 +398,7 @@ Nod* succesor(Nod* x)
         }
         else
         {
+            // COMPLETAT: Cazurile simetrice cand x este fiu drept
             Nod* w = x->parent->left;
 
             if (w->color == RED)
@@ -320,6 +435,20 @@ Nod* succesor(Nod* x)
 
     x->color = BLACK;
 }
+
+/*
+ * Functie: stergere
+ * -----------------
+ * Sterge un nod din arborele Red-Black pe baza valorii date.
+ * Daca valoarea nu exista, se afiseaza un mesaj.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ * val - valoarea nodului care trebuie sters
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
  void stergere(RBT* t, int val)
 {
@@ -389,6 +518,20 @@ Nod* succesor(Nod* x)
     delete z;
 }
 
+/*
+ * Functie: parcurgereInOrder
+ * -------------------
+ * Parcurge arborele Red-Black inordine si afiseaza
+ *
+ * fiecare nod impreuna cu culoarea sa.
+ *
+ * Parametri:
+ * t - pointer catre arborele Red-Black
+ *
+ * Returneaza:
+ * nimic (void)
+ */
+
 void parcurgereInOrder(Nod* nod){
      if (nod==NIL) return;
      parcurgereInOrder(nod->left);
@@ -403,6 +546,20 @@ void parcurgereInOrder(Nod* nod){
 
      parcurgereInOrder(nod->right);
 }
+
+/*
+ * Functie: afisareCronologie
+ * -------------------
+ * Actioneaza ca punct de intrare public pentru afisarea istoricului.
+ * Verifica daca arborele este gol
+ * iar in caz contrar initiaza parcurgerea recursiva In-Order.
+ *
+ * Parametri:
+ * t - pointer catre structura principala a arborelui Red-Black
+ *
+ * Returneaza:
+ * nimic (void)
+ */
 
 void afisareCronologie(RBT* t){
     if (t->root == NIL){

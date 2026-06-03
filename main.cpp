@@ -7,6 +7,21 @@
 
 using namespace std;
 
+/*
+ * Functie: calculeazaPunctaj
+ * ------------------
+ * Calculeaza scorul numeric de prioritate al unei nave pe baza caracteristicilor sale.
+ * Acorda un bonus fix pentru navele militare si adauga puncte specifice in functie
+ * de incarcatura transportat.
+ *
+ * Parametri:
+ * esteMilitara - valoare booleana ce indica daca nava este militara sau nu
+ * tipIncarcatura - string ce specifica categoria de marfa (Alimente, Combustibil ...)
+ *
+ * Returneaza:
+ * un numar intreg (score) ce reprezinta ponderea totala de prioritate a navei
+ */
+
 int calculeazaPunctaj(bool esteMilitara,string tipIncarcatura){
     int score = 0;
     if(esteMilitara)
@@ -126,5 +141,7 @@ int main(){
             }
         }
     } while (optiune != 6);
+    distrugeTabel(registru);
+    distrugeHeap(coadaPrioritati);
     return 0;
 }
