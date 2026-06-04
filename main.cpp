@@ -22,6 +22,9 @@ using namespace std;
  * un numar intreg (score) ce reprezinta ponderea totala de prioritate a navei
  */
 
+
+
+
 int calculeazaPunctaj(bool esteMilitara,string tipIncarcatura){
     int score = 0;
     if(esteMilitara)
@@ -36,6 +39,19 @@ int calculeazaPunctaj(bool esteMilitara,string tipIncarcatura){
         score += 3;
     }
     return score;
+}
+
+void adaugaNavaPreDefinita(RBT* arbore, Heap* heap, HashTable* tabel, int& contor,
+                           string nume, string marfa, string origine, string dest, bool esteMil) {
+
+    int pr = calculeazaPunctaj(esteMil, marfa);
+    int ord = contor++;
+
+    Nava nava(nume, marfa, origine, dest, ord, pr);
+
+    inserare(arbore, nava);
+    inserareHeap(heap, nava);
+    inserareHash(tabel, nava.nume, nava);
 }
 
 void afisareMeniu()
@@ -59,6 +75,18 @@ int main(){
 
     int optiune;
     int contorSosire = 1;
+
+    adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
+                          "CargoAlpha", "Panama", "Constanta", "Standard", false);
+
+    adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
+                          "Poseidon", "Grecia", "Constanta", "Alimente", false);
+
+    adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
+                          "Ares", "SUA", "Mangalia", "Combustibil", true);
+
+    adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
+                          "TechWave", "China", "Constanta", "Electronice", false);
 
     do {
         afisareMeniu();
@@ -85,6 +113,7 @@ int main(){
                     getline(cin,nava.tipContainer);
                     cout << "Este nava militara? (da/nu): ";
                     cin >> Militar;
+                    cin.ignore();
 
                     nava.ordineSosire = contorSosire++;
 
@@ -138,6 +167,9 @@ int main(){
             case 6: {
                     cout << "Sistem oprit.\n";
                     break;
+            }
+            default: {
+                    cout << "Optiune invalida.\n";
             }
         }
     } while (optiune != 6);

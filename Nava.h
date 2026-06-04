@@ -12,7 +12,7 @@ struct Nava{
     int prioritate;
     int ordineSosire;
 
-    Nava(string n="", string t="", string trO="", string dest="",int ord=0, int pr=-1,) {
+    Nava(string n="", string t="", string trO="", string dest="",int ord=0, int pr=-1) {
         nume = n;
         tipContainer = t;
         taraOrigine = trO;

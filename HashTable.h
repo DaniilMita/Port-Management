@@ -55,8 +55,7 @@ int hashFunction(string key,int size){
  * pointer catre tabela Hash nou creata si initializata
  */
 
-HashTable* creareTabel(int size)
-{
+HashTable* creareTabel(int size){
     HashTable* table = new HashTable();
     table->size = size;
     table->table = new HashNode*[size];
@@ -82,18 +81,18 @@ HashTable* creareTabel(int size)
  */
 
 void inserareHash(HashTable* table,string key,Nava nava){
-    int index = hashFunction(nava.nume,table->size);
+    int i = hashFunction(nava.nume,table->size);
     HashNode* node = new HashNode();
     node->key = key;
     node->data = nava;
     node->next = nullptr;
 
-    if(table->table[index] == nullptr){
-        table->table[index] = node;
+    if(table->table[i] == nullptr){
+        table->table[i] = node;
     }
     else{
-        node->next = table->table[index];
-        table->table[index] = node;
+        node->next = table->table[i];
+        table->table[i] = node;
     }
 }
 
