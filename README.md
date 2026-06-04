@@ -1,1 +1,3 @@
 # Port-Management
+Sistem de gestiune și prioritizare a fluxului de nave într-un port comercial. Într-un scenariu real, porturile se confruntă cu un volum uriaș de trafic, iar ordinea de descărcare a navelor nu poate fi pur cronologică (primul sosit, primul servit), deoarece anumite transporturi (militare, combustibili sau alimente) au un caracter critic sau de urgență ridicat.
+Aplicația rezolvă această problemă prin stocarea navelor pentru căutări rapide și prin organizarea lor într-o coadă de așteptare, unde navele ce dețin prioritate maxime vor fi procesate primele și salvează istoricul navelor procesate.
