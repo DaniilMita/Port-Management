@@ -23,8 +23,6 @@ using namespace std;
  */
 
 
-
-
 int calculeazaPunctaj(bool esteMilitara,string tipIncarcatura){
     int score = 0;
     if(esteMilitara)
@@ -77,16 +75,16 @@ int main(){
     int contorSosire = 1;
 
     adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
-                          "CargoAlpha", "Panama", "Constanta", "Standard", false);
+                          "CargoAlpha", "Standart", "Constanta", "Panama", false);
 
     adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
-                          "Poseidon", "Grecia", "Constanta", "Alimente", false);
+                          "Poseidon", "Alimente", "Constanta","Grecia" , false);
 
     adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
-                          "Ares", "SUA", "Mangalia", "Combustibil", true);
+                          "Ares", "Combustibil", "Mangalia","SUA", true);
 
     adaugaNavaPreDefinita(arboreSosiri, coadaPrioritati, registru, contorSosire,
-                          "TechWave", "China", "Constanta", "Electronice", false);
+                          "TechWave", "Electronice", "Constanta","China" , false);
 
     do {
         afisareMeniu();
